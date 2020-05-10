@@ -1,0 +1,166 @@
+
+exports.up = function(knex) {
+    return knex.schema.createTable('users', function (table) {
+        table.increments()
+        table.string("first_name",128).notNullable();
+        table.string("last_name",128).notNullable();
+        table.string("password",128).notNullable();
+        table.string("email",128).notNullable().unique()
+        table.string("gender",128).notNullable();
+        table.date('birthday').notNullable();
+        table.boolean('online').notNullable();
+        table.json('picture');
+        table.string("occupation",255)
+          table.string("college",255)
+          table.string("high_school",255)
+          table.string("elementary_school",255)
+          table.string("birth_place",255)
+          table.string("current_location",255)
+          table.string("bio",255)
+        
+      })
+      .createTable("comments",function (table){
+          table
+          .increments();
+          table.string("message",128)
+          .notNullable()
+          table
+          .time("time",356).notNullable();
+          table.integer("post_id",128).notNullable()
+          .unsigned()
+          .references("id")
+          .inTable("posts")
+          .onDelete("RESTRICT")
+          .onUpdate("CASCADE")
+          table.string("user_id",128).notNullable().unsigned()
+          .references("id")
+          .inTable("users")
+          .onDelete("RESTRICT")
+          .onUpdate("CASCADE")
+      })
+      .createTable("messages",function(table){
+          table.increments()
+          table
+          .string("message",128).notNullable();
+          table
+          .integer("sender_id")
+          .unsigned()
+          .references("id")
+          .inTable("users")
+          .onDelete("RESTRICT")
+          .onUpdate("CASCADE")
+          table
+          .integer("receiver_id")
+          .unsigned()
+          .references("id")
+          .inTable("users")
+          .onDelete("RESTRICT")
+          .onUpdate("CASCADE")
+          table.boolean('read').notNullable();
+          table
+          .time("time",356).notNullable();
+
+
+      })
+      .createTable("friends",function(table){
+        table.increments()
+        table
+        .integer("user_id")
+        .unsigned()
+        .references("id")
+        .inTable("users")
+        .onDelete("RESTRICT")
+        .onUpdate("CASCADE")
+        table
+        .integer("friend_id")
+        .unsigned()
+        .references("id")
+        .inTable("users")
+        .onDelete("RESTRICT")
+        .onUpdate("CASCADE")
+      })
+      .createTable("friend_requests",function(table){
+        table.increments()
+        table
+        .integer("user_id")
+        .unsigned()
+        .references("id")
+        .inTable("users")
+        .onDelete("RESTRICT")
+        .onUpdate("CASCADE")
+        table
+        .integer("request_id")
+        .unsigned()
+        .references("id")
+        .inTable("users")
+        .onDelete("RESTRICT")
+        .onUpdate("CASCADE")
+      })
+      .createTable("pictures",function(table){
+        table.increments()
+        table
+        .integer("user_id")
+        .unsigned()
+        .references("id")
+        .inTable("users")
+        .onDelete("RESTRICT")
+        .onUpdate("CASCADE")
+        table.time("time",356).notNullable();
+        table.string("description",255)
+        table.string("picture",255).notNullable();
+       
+        
+
+      })
+      .createTable("posts",function(table){
+        table.increments()
+        table
+        .integer("user_id")
+        .unsigned()
+        .references("id")
+        .inTable("users")
+        .onDelete("RESTRICT")
+        .onUpdate("CASCADE")
+        table.time("time",356).notNullable();
+        table.string("video",255)
+        table
+        .string("message",128).notNullable();
+        table
+        .integer("likes",356).notNullable();
+        table
+        .integer("comments",356).notNullable();
+        table.json('picture')
+        
+      })
+      .createTable("likes",function(table){
+        table.increments()
+        table
+        .integer("user_id")
+        .unsigned()
+        .references("id")
+        .inTable("users")
+        .onDelete("RESTRICT")
+        .onUpdate("CASCADE")
+        .notNullable();
+        table
+        .integer("post_id")
+        .unsigned()
+        .references("id")
+        .inTable("posts")
+        .onDelete("RESTRICT")
+        .onUpdate("CASCADE")
+        .notNullable();
+        
+      })
+};
+
+exports.down = function(knex) {
+    return knex.schema.dropTableIfExists('users')
+    .dropTableIfExists("comments")
+    .dropTableIfExists("messages")
+    .dropTableIfExists("info")
+    .dropTableIfExists("friends")
+    .dropTableIfExists("pictures")
+    .dropTableIfExists("posts")
+    .dropTableIfExists("likes")
+};
