@@ -7,13 +7,9 @@ const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const multer = require("multer")
 
-// router.use(cors({ origin: "*" }));
-// router.use(bodyParser.json());
+router.use(cors({ origin: "*" }));
+router.use(bodyParser.json());
 
-router.post("/file", upload.single("file"), (req, res) => {
-  // res.sendFile(`uploads/${req.file.filename}`);
-  console.log("/file")
-})
 
 router.post('/register', (req, res) => {
   let user = req.body
