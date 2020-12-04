@@ -10,19 +10,6 @@ const multer = require("multer")
 // router.use(cors({ origin: "*" }));
 // router.use(bodyParser.json());
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-      cb(null, "public")
-  },
-  filename: function (req, file, cb) {
-      const parts = file.mimetype.split("/");
-      cb(null, `${file.fieldname}-${Date.now()}.${parts[1]}`)
-  }
-})
-
-const upload = multer({storage});
-
-
 router.post("/file", upload.single("file"), (req, res) => {
   // res.sendFile(`uploads/${req.file.filename}`);
   console.log("/file")
