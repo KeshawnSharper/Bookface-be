@@ -6,8 +6,8 @@ const router = express.Router();
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 // const multer = require("multer")
-// const cors = require("cors")
-// const bodyParser = require("body-parser")
+const cors = require("cors")
+const bodyParser = require("body-parser")
 
 router.use(cors({ origin: "*" }));
 router.use(bodyParser.json());
@@ -162,7 +162,9 @@ router.get('/:id/messages/:receiver_id', (req, res) => {
     var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     req.body.likes = 0
     req.body.time = time
-    req.body.user_id = req.params.id
+    req.body.user_id = Number(req.params.id)
+    req.body.comments = 0
+    console.log(req.body)
     data.post(req.body)
     .then(project => {
      res.status(201).json(project)

@@ -1,11 +1,20 @@
 const db = require('../data/dbConfig');
 
 function getUsers() {
-  return db("users")
-}
+  return db("users").then(users => {
+    return users.map(user => {
+      user.online = user.online ? true :false
+        return user
+    })
+})}
 function getFriends(id) {
-    return db("users").select('user_id',"first_name","last_name","email","gender","birthday","picture").join('friends', 'users.id', '=', 'friends.user_id').where({"friends.friend_id":id})
-  }
+    return db("users").select('user_id',"online","first_name","last_name","email","gender","birthday","picture").join('friends', 'users.id', '=', 'friends.user_id').where({"friends.friend_id":id})
+    .then(users => {
+      return users.map(user => {
+        user.online = user.online ? true :false
+          return user
+      })
+  })}
   function getMessages(first,second) {
     return db("messages").where({"messages.receiver_id":first}).andWhere({"messages.sender_id":second}).orWhere({"messages.sender_id":first}).andWhere({"messages.receiver_id":second}).then(messages => {
       return messages.map(message => {
@@ -15,8 +24,13 @@ function getFriends(id) {
   })
   }
 function getInfo(id){
-    return db("users").where({"id":id})
-}
+    return db("users").select("id","first_name","email","last_name",
+    "birthday","online").where({"id":id}).then(users => {
+      return users.map(user => {
+        user.online = user.online ? true :false
+          return user
+      })
+})}
 function getPhotos(id){
   return db("pictures").where({"user_id":id})
 }
@@ -24,7 +38,7 @@ function editPhotos(id,data){
   return db("pictures").where({"user_id":id}).update(data)
 }
 function getPosts(id){
-  return db("posts").select("posts.id As id","user_id","first_name","last_name",
+  return db("posts").select("posts.id As id","user_id","email","last_name",
   "time",
   "likes",
   "comments",
