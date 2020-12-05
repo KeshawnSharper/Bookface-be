@@ -5,31 +5,17 @@ const data = require('./data-model')
 const router = express.Router();
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const multer = require("multer")
+// const multer = require("multer")
+// const cors = require("cors")
+// const bodyParser = require("body-parser")
 
 // router.use(cors({ origin: "*" }));
 // router.use(bodyParser.json());
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-      cb(null, "public")
-  },
-  filename: function (req, file, cb) {
-      const parts = file.mimetype.split("/");
-      cb(null, `${file.fieldname}-${Date.now()}.${parts[1]}`)
-  }
-})
-
-const upload = multer({storage});
-
-
-router.post("/file", upload.single("file"), (req, res) => {
-  // res.sendFile(`uploads/${req.file.filename}`);
-  console.log("/file")
-})
 
 router.post('/register', (req, res) => {
   let user = req.body
+  console.log(user)
   let hash = bcrypt.hashSync(user.password,13)
   user.online = false
   user.password = hash 
@@ -46,6 +32,8 @@ res.status(500).json({ message: 'Failed to get schemes' })
 
 router.post('/login', (req, res) => {
   let body = req.body
+  console.log(body)
+
   data.login(body)
   .first()
   .then(user => {
