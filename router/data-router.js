@@ -9,8 +9,8 @@ const jwt = require("jsonwebtoken")
 // const cors = require("cors")
 // const bodyParser = require("body-parser")
 
-// router.use(cors({ origin: "*" }));
-// router.use(bodyParser.json());
+router.use(cors({ origin: "*" }));
+router.use(bodyParser.json());
 
 
 router.post('/register', (req, res) => {
